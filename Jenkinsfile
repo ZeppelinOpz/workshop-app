@@ -1,4 +1,6 @@
-podTemplate(containers: [
+def label = "petclinic-${UUID.randomUUID().toString()}"
+podTemplate(label: label,
+            containers: [
                     containerTemplate(name: 'heptio', image: 'zeppelinops/kubectl-helm-heptio', command: 'cat', ttyEnabled: true),
                     containerTemplate(name: 'docker', image: 'docker', command: 'cat', ttyEnabled: true),
                     containerTemplate(name: 'maven', image: 'maven:3.6.0-jdk-11-slim', command: 'cat', ttyEnabled: true)                         
@@ -9,7 +11,8 @@ podTemplate(containers: [
                     
             ]) 
 {
-    node() {       
+    node(label) {
+        properties([disableConcurrentBuilds()])
         try{
         stage('Checkout') {
             checkout scm
