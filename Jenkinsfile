@@ -75,8 +75,7 @@ podTemplate(label: label,
                         sh 'sleep 5m'                        
                         withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', credentialsId: 'aws-cred']]) {
                             sh """
-                                export KUBECONFIG=/home/jenkins/.kube/kubeconfig                        
-                                kubectl config set-context workshop.k8s.local --namespace=${env_x}
+                                export KUBECONFIG=/home/jenkins/.kube/kubeconfig                                                      
                                 set +e
                                 helm upgrade petclinic-${env_x} . -f values-${env_x}.yaml --set image.tag=${GIT_COMMIT} --install --wait --force
                                 export DEPLOY_RESULT=\$?
