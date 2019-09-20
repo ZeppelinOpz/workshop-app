@@ -19,7 +19,7 @@ podTemplate(label: label,
             checkout scm
         }
         stage('UnitTest') {
-            if(env.BRANCH_NAME == "master") {
+            if(env.BRANCH_NAME == "development") {
                 container('maven') {
                     sh 'unset MAVEN_CONFIG && ./mvnw test'
                 }
@@ -72,9 +72,11 @@ podTemplate(label: label,
             container('heptio') {
                     if(env.BRANCH_NAME == "development" || env.BRANCH_NAME == "test" || env.BRANCH_NAME == "master" ) {
                     dir('.helm') {
+                        sleep 5m                        
                         withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', credentialsId: 'aws-cred']]) {
                             sh """
-                                export KUBECONFIG=/home/jenkins/.kube/kubeconfig                            
+                                export KUBECONFIG=/home/jenkins/.kube/kubeconfig                        
+                                kubectl config set-context workshop.k8s.local --namespace=${env_x}
                                 set +e
                                 helm upgrade petclinic-${env_x} . -f values-${env_x}.yaml --set image.tag=${GIT_COMMIT} --install --wait --force
                                 export DEPLOY_RESULT=\$?
@@ -89,10 +91,10 @@ podTemplate(label: label,
         stage("FunctionalTest"){
             if(env.BRANCH_NAME == "test" ) {
                 echo("Testinium functional tests TEST environment");
-                testiniumExecution failOnTimeout: true, planId: 2979, projectId: 1659, timeoutSeconds: 600
+                //testiniumExecution failOnTimeout: true, planId: 2979, projectId: 1659, timeoutSeconds: 600
             } else if(env.BRANCH_NAME == "master") {
                 echo("Testinium functional tests PROD environment");
-                testiniumExecution failOnTimeout: true, planId: 3028, projectId: 1659, timeoutSeconds: 600       
+                //testiniumExecution failOnTimeout: true, planId: 3028, projectId: 1659, timeoutSeconds: 600       
             }        
         }
         }
