@@ -72,7 +72,7 @@ podTemplate(label: label,
             container('heptio') {
                     if(env.BRANCH_NAME == "development" || env.BRANCH_NAME == "test" || env.BRANCH_NAME == "master" ) {
                     dir('.helm') {
-                        sleep 5m                        
+                        sh 'sleep 5m'                        
                         withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', credentialsId: 'aws-cred']]) {
                             sh """
                                 export KUBECONFIG=/home/jenkins/.kube/kubeconfig                        
