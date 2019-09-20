@@ -71,8 +71,7 @@ podTemplate(label: label,
             def GIT_COMMIT_MESSAGE = sh(returnStdout: true, script: 'git log -1 --pretty=%B').trim()
             container('heptio') {
                     if(env.BRANCH_NAME == "development" || env.BRANCH_NAME == "test" || env.BRANCH_NAME == "master" ) {
-                    dir('.helm') {
-                        sh 'sleep 5m'                        
+                    dir('.helm') {                       
                         withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', credentialsId: 'aws-cred']]) {
                             sh """
                                 export KUBECONFIG=/home/jenkins/.kube/kubeconfig                                                      
