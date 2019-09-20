@@ -1,6 +1,7 @@
 def label = "petclinic-${UUID.randomUUID().toString()}"
 podTemplate(label: label,
             containers: [
+                    containerTemplate(name: 'jnlp', image: 'jenkins/jnlp-slave:3.27-1-alpine', args: '${computer.jnlpmac} ${computer.name}'),
                     containerTemplate(name: 'heptio', image: 'zeppelinops/kubectl-helm-heptio', command: 'cat', ttyEnabled: true),
                     containerTemplate(name: 'docker', image: 'docker', command: 'cat', ttyEnabled: true),
                     containerTemplate(name: 'maven', image: 'maven:3.6.0-jdk-11-slim', command: 'cat', ttyEnabled: true)                         
