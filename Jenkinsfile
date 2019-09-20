@@ -7,9 +7,9 @@ podTemplate(label: label,
                     containerTemplate(name: 'maven', image: 'maven:3.6.0-jdk-11-slim', command: 'cat', ttyEnabled: true)                         
             ],
             volumes: [
-                    hostPathVolume(hostPath: '/maven', mountPath: '/root/.m2'),
-                    hostPathVolume(hostPath: '/var/run/docker.sock', mountPath: '/var/run/docker.sock'),
-                    
+                    secretVolume(secretName: 'kubeconfig', mountPath: '/home/jenkins/.kube'),
+                    hostPathVolume(hostPath: '/maven', mountPath: '/root/.m2'),                    
+                    hostPathVolume(hostPath: '/var/run/docker.sock', mountPath: '/var/run/docker.sock'),                    
             ]) 
 {
     node(label) {
